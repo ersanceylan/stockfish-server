@@ -45,12 +45,12 @@ app.post("/bestmove", async (req, res) => {
     const result = await stockfish.go({ movetime: 60 });
 
     // Parse the best move
-    if (result.bestmove) {
+    if (result.bestmove && result.bestmove !== "(none)") {
       const from = result.bestmove.slice(0, 2);
       const to = result.bestmove.slice(2, 4);
-      res.json({ move: { from, to } });
+      res.json({ move: { from, to, promotion: result.bestmove.slice(4, 5) } });
     } else {
-      res.status(500).json({ error: "Failed to calculate the best move" });
+      res.status(204).json({ error: "Failed to calculate the best move" });
     }
   } catch (err) {
     console.error("Error:", err);
