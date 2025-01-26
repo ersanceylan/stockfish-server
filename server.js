@@ -71,7 +71,7 @@ process.on("SIGINT", shutdown);
 process.on("SIGTERM", shutdown);
 
 // Start the Express server
-const PORT = 3090;
+const PORT = 3102;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
