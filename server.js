@@ -24,19 +24,28 @@ initializeEngine().catch((err) => {
 // API Endpoint to Get Best Move
 app.post("/bestmove", async (req, res) => {
   try {
-    const { fen, elo } = req.body;
+    const { fen, level } = req.body;
 
-    console.log(fen, elo);
+    console.log(fen, level);
 
-    if (!fen || !elo) {
-      return res.status(400).json({ error: "FEN and ELO are required" });
+    if (!fen || !level) {
+      return res.status(400).json({ error: "FEN and Level are required" });
     }
 
+    let skillLevel = 0;
+
+    if (level === "easy") {
+      skillLevel = Math.floor(Math.random() * 3) + 1; // random between 1-3
+    } else if (level === "medium") {
+      skillLevel = Math.floor(Math.random() * 3) + 7; // random between 7-10
+    } else if (level === "hard") {
+      skillLevel = Math.floor(Math.random() * 3) + 12; // random between 12-15
+    }
     // Calculate skill level (0-20) based on ELO
     // const skillLevel = Math.min(Math.max(Math.floor((elo - 800) / 200), 0), 20);
     // console.log(skillLevel);
     // await stockfish.setoption("Skill Level", skillLevel);
-    await stockfish.setoption("UCI_Elo", elo);
+    await stockfish.setoption("Skill Level", skillLevel);
 
     // Set the position from the provided FEN
     await stockfish.position(fen);
