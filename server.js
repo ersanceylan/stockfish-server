@@ -35,11 +35,11 @@ app.post("/bestmove", async (req, res) => {
     let skillLevel = 0;
 
     if (level === "easy") {
-      skillLevel = Math.floor(Math.random() * 3) + 1; // random between 1-3
+      skillLevel = 1; // random between 1-3
     } else if (level === "medium") {
-      skillLevel = Math.floor(Math.random() * 3) + 7; // random between 7-10
+      skillLevel = 5; // random between 7-10
     } else if (level === "hard") {
-      skillLevel = Math.floor(Math.random() * 3) + 12; // random between 12-15
+      skillLevel = 10; // random between 12-15
     }
     // Calculate skill level (0-20) based on ELO
     // const skillLevel = Math.min(Math.max(Math.floor((elo - 800) / 200), 0), 20);
@@ -51,7 +51,7 @@ app.post("/bestmove", async (req, res) => {
     await stockfish.position(fen);
 
     // Get the best move with a search time of 1000ms
-    const result = await stockfish.go({ movetime: 60 });
+    const result = await stockfish.go({ depth: skillLevel * 2 });
 
     // Parse the best move
     if (result.bestmove && result.bestmove !== "(none)") {
